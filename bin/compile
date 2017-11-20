@@ -4,11 +4,13 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-echo "Storing stuff in npmrc"
-ls $ENV_DIR
-cat $ENV_DIR/NEXUS_NPM_AUTH
-env
-printf "email=dev@storytel.com
-_auth="$(cat $ENV_DIR/NEXUS_NPM_AUTH)"
+NPM_AUTH=$(cat $ENV_DIR/NEXUS_NPM_AUTH)
+NPM_EMAIL=$(cat $ENV_DIR/NEXUS_NPM_EMAIL)
+NPM_REGISTRY=$(cat $ENV_DIR/NEXUS_NPM_REGISTRY)
+
+echo "Creating an npm account for '$NPM_EMAIL' to registry '$NPM_REGISTRY'"
+printf "email=$NPM_EMAIL
+_auth=$NPM_AUTH
 always-auth=true
-@storytel:registry=https://nexus.storytel.com/content/repositories/npm" > ~/.npmrc
+$NPM_REGISTRY
+" > ~/.npmrc

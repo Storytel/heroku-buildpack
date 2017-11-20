@@ -2,8 +2,8 @@
 
 BUILD_DIR=$1
 
-if [ -f $BUILD_DIR/yarn.lock ]; then
-  echo "Yarn"
+if [ -f $BUILD_DIR/package.json ]; then
+  echo "Package.json"
   exit 0
 fi
 
