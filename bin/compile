@@ -24,7 +24,7 @@ echo "Adding lerna globally"
 yarn add global lerna
 
 echo "Adding yarn global bin dir to path"
-export PATH="$PATH:$(yarn global dir)"
+export PATH="$PATH:$(yarn global dir)/node_modules/.bin"
 
 cd $BUILD_DIR
 echo "Lerna bootstrap"
