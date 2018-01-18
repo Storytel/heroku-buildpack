@@ -25,7 +25,7 @@ lerna run build --stream
 echo "Setting up `static.json`"
 echo <<'EOF' > static.json
 {
-  "root": "build/",
+  "root": "packages/apex/build/",
   "clean_urls": false,
   "routes": {
     "/**": "index.html"
