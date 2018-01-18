@@ -2,8 +2,8 @@
 
 BUILD_DIR=$1
 
-if [ -f $BUILD_DIR/package.json ]; then
-  echo "Package.json"
+if [ -f $BUILD_DIR/lerna.json ]; then
+  echo "Lerna monorepo detected"
   exit 0
 fi
 
