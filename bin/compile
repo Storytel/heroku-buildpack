@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -x
 
 set -e
 
@@ -17,24 +17,9 @@ always-auth=true
 $NPM_REGISTRY
 " > ~/.npmrc
 
-echo "Enabling workspaces in yarn"
-yarn config set workspaces-experimental true
-
-echo "Adding lerna globally"
-yarn add global lerna
-
-echo "Adding yarn global bin dir to path"
-export PATH="$PATH:$(yarn global dir)/node_modules/.bin"
-
+echo "Setting up static.json"
 cd $BUILD_DIR
-echo "Lerna bootstrap"
-lerna bootstrap
-
-echo "Building all packages in the monorepo..."
-lerna run build --stream
-
-echo "Setting up `static.json`"
-echo <<'EOF' > static.json
+cat << EOF > static.json
 {
   "root": "packages/apex/build/",
   "clean_urls": false,
@@ -42,5 +27,20 @@ echo <<'EOF' > static.json
     "/**": "index.html"
   }
 }
+EOF
 
-EOF;
+echo "CATTTING"
+cat $BUILD_DIR/static.json
+
+echo "Enabling workspaces in yarn"
+yarn config set workspaces-experimental true
+
+cd $BUILD_DIR
+echo "Installing devDependencies"
+yarn --production=false
+
+echo "Lerna bootstrap"
+$BUILD_DIR/node_modules/.bin/lerna bootstrap
+
+echo "Building all packages in the monorepo..."
+$BUILD_DIR/node_modules/.bin/lerna run build --stream
