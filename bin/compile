@@ -17,6 +17,9 @@ $NPM_REGISTRY
 " > ~/.npmrc
 
 yarn config set workspaces-experimental true
+yarn add global lerna
+lerna bootstrap
+lerna run build --stream
 
 echo "Setting up `static.json`"
 echo <<'EOF' > static.json
