@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
@@ -15,11 +17,20 @@ always-auth=true
 $NPM_REGISTRY
 " > ~/.npmrc
 
+echo "Enabling workspaces in yarn"
 yarn config set workspaces-experimental true
+
+echo "Adding lerna globally"
 yarn add global lerna
 
+echo "Adding yarn global bin dir to path"
+export PATH="$PATH:$(yarn global dir)"
+
 cd $BUILD_DIR
+echo "Lerna bootstrap"
 lerna bootstrap
+
+echo "Building all packages in the monorepo..."
 lerna run build --stream
 
 echo "Setting up `static.json`"
@@ -31,4 +42,5 @@ echo <<'EOF' > static.json
     "/**": "index.html"
   }
 }
+
 EOF;
