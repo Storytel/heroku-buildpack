@@ -17,6 +17,8 @@ $NPM_REGISTRY
 
 yarn config set workspaces-experimental true
 yarn add global lerna
+
+cd $BUILD_DIR
 lerna bootstrap
 lerna run build --stream
 
