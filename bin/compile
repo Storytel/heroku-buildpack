@@ -35,10 +35,6 @@ cat $BUILD_DIR/static.json
 echo "Enabling workspaces in yarn"
 yarn config set workspaces-experimental true
 
-cd $BUILD_DIR
-echo "Installing devDependencies"
-yarn --production=false
-
 echo "Lerna bootstrap"
 $BUILD_DIR/node_modules/.bin/lerna bootstrap
 
