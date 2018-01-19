@@ -1,5 +1,6 @@
-#!/bin/bash -x
+#!/bin/bash
 
+# Make sure an error terminates the script
 set -e
 
 BUILD_DIR=$1
@@ -17,8 +18,10 @@ always-auth=true
 $NPM_REGISTRY
 " > ~/.npmrc
 
-echo "Setting up static.json"
 cd $BUILD_DIR
+export PATH=$PATH:$BUILD_DIR/node_modules/.bin
+
+echo "Setting up static.json"
 cat << EOF > static.json
 {
   "root": "packages/apex/build/",
@@ -29,14 +32,15 @@ cat << EOF > static.json
 }
 EOF
 
-echo "CATTTING"
-cat $BUILD_DIR/static.json
-
 echo "Enabling workspaces in yarn"
 yarn config set workspaces-experimental true
 
-echo "Lerna bootstrap"
-$BUILD_DIR/node_modules/.bin/lerna bootstrap
+echo "Installing devDependencies"
+# This is necessary since NODE_ENV=production on heroku so the nodejs buildpack don't install devDependencies
+yarn --production=false
 
-echo "Building all packages in the monorepo..."
-$BUILD_DIR/node_modules/.bin/lerna run build --stream
+echo "Lerna bootstrap"
+lerna bootstrap
+
+echo "Building all packages in the monorepo"
+lerna run build --stream
